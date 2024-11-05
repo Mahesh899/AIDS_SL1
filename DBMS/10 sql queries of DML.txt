@@ -51,6 +51,6 @@ create view newView as select student2.name,student2.roll_no,studentcourse.cID f
 select*from newView;
 
 select *from student2 where roll_no in
-    -> (select roll_no from studentcourse);
+    (select roll_no from studentcourse);
 
 select*from student2 where roll_no in(select roll_no from studentcourse where student2.age<20);
