@@ -25,38 +25,37 @@ select*from fine;
 delimiter $
 
 create procedure fine_calculatio(IN rno int,bname char(20))
-    ->      begin
-    ->      declare i_date date;
-    ->      declare diff int;
-    ->      declare fine_amt int;
-    ->      declare exit handler for sqlexception select 'Table not found ';
-    ->      select dateofIssue into i_date from borrower where rollin=rno and bname=bname;
-    ->      select datediff(curdate(),i_date) into diff;
-    ->      if(diff>15 and diff<=30) then
-    ->      set fine_amt=diff*5;
-    ->      insert into fine values (rno,curdate(),fine_amt);
-    ->      elseif(diff>30) then
-    ->      set fine_amt =15*5+(diff-30)*50;
-    ->      insert into fine values (rno ,curdate(),fine_amt);
-    ->      end if;
-    ->      update borrower set status ='R' where rollin=rno and bname =bname ;
-    ->      end;
-    ->      $
+    begin
+    declare i_date date;
+    declare diff int;
+    declare fine_amt int;
+    declare exit handler for sqlexception select 'Table not found ';
+    select dateofIssue into i_date from borrower where rollin=rno and bname=bname;
+    select datediff(curdate(),i_date) into diff;
+    if(diff>15 and diff<=30) then
+    set fine_amt=diff*5;
+    insert into fine values (rno,curdate(),fine_amt);
+    elseif(diff>30) then
+    set fine_amt =15*5+(diff-30)*50;
+    insert into fine values (rno ,curdate(),fine_amt);
+    end if;
+    update borrower set status ='R' where rollin=rno and bname =bname ;
+    end;
+    $
 
 call fine_calculatio(3,'dbms');
 
 select*from fine;
--> $
+$
 
 call fine_calculatio(2,'networking');
-    -> $
+$
 
 select*from fine
-    -> $
+$
 
 call fine_calculatio(4,'CN');
-    -> $
+$
 
 select*from fine;
-    -> $
-
+$
